@@ -5,9 +5,10 @@ import kotlin.time.Duration.Companion.seconds
 
 data class ProdTimer (
     var nome:String,
-    var grupo:String,
+    var grupo:String?,
     val lastSession: Duration?=null,
     val sessionHistory: List<Duration>?=null,
+    var active:Boolean=false
 
 )
 
