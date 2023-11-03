@@ -11,9 +11,9 @@ data class ProdTimer (
 
 )
 
-fun ProdTimer.TotalTime(timer:ProdTimer):Duration {
+fun ProdTimer.TotalTime():Duration {
     var total=0.seconds
-    timer.sessionHistory?.let {
+    this.sessionHistory?.let {
         total=it.reduce{acc,value -> acc+ value}
     }
     return total

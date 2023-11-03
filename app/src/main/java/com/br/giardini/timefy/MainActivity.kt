@@ -23,6 +23,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+
                     App()
                 }
             }
@@ -32,7 +33,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun App() {
     Column {
-        AddTimer()
+        TimerList()
     }
 }
 
