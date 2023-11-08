@@ -1,4 +1,4 @@
-package com.br.giardini.timefy
+package com.br.giardini.timefy.view
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,16 +8,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.rounded.AddCircle
-import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -28,21 +25,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.br.giardini.timefy.model.ProdTimer
-import com.br.giardini.timefy.model.TotalTime
-import com.br.giardini.timefy.model.stop
+import com.br.giardini.timefy.viewmodel.TimerListState
+import com.br.giardini.timefy.viewmodel.TotalTime
+import com.br.giardini.timefy.viewmodel.playPauseButtonIcon
+import com.br.giardini.timefy.viewmodel.stop
 import kotlin.time.ExperimentalTime
-
-
-data class TimerListState(
-    val nameValue: MutableState<TextFieldValue>,
-    val groupValue: MutableState<TextFieldValue>,
-    val timers: MutableState<List<ProdTimer>>
-)
-
 
 @Composable
 fun TimerList(){
-    
+
     val state = remember {
         TimerListState(
             mutableStateOf(TextFieldValue()),
@@ -50,7 +41,7 @@ fun TimerList(){
             mutableStateOf(emptyList())
         )
     }
-    
+
     Column {
         AddTimerComponent(state)
         IndividualTimerComponent(state)
@@ -89,7 +80,6 @@ fun AddTimerComponent(state: TimerListState){
             }
         }
     }
-
 }
 
 @OptIn(ExperimentalTime::class)
@@ -97,12 +87,7 @@ fun AddTimerComponent(state: TimerListState){
 fun IndividualTimerComponent(state: TimerListState){
     val timer = state.timers.value
     timer.forEach{
-        val playIcon= if (it.active.value){
-            Icons.Filled.Pause
-        }else{
-            Icons.Rounded.PlayArrow
-        }
-
+        val icon = playPauseButtonIcon(it)
         Row {
             Box(modifier = Modifier.fillMaxWidth(0.85f)){
                 Column {
@@ -125,9 +110,8 @@ fun IndividualTimerComponent(state: TimerListState){
                         it.active.value = !it.active.value
                         it.lastSession = it.stop(it.firstTimeMark)
                     } ){
-                        Icon(imageVector = playIcon, contentDescription ="Play/Pause button",modifier = Modifier.size(ButtonDefaults.IconSize))
-                        Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(text = "${it.active.value}")
+                        Icon(imageVector = icon, contentDescription ="Play/Pause button",modifier = Modifier.size(
+                            ButtonDefaults.IconSize))
                     }
 
                 }
@@ -135,5 +119,4 @@ fun IndividualTimerComponent(state: TimerListState){
             }
         }
     }
-
 }
